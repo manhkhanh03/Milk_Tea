@@ -13,6 +13,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Call api web routes
+Route::get('/{address}', 'App\Http\Controllers\Controller@show_web');

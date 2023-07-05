@@ -9,4 +9,10 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
+
+    public function show_web($address, $value = '') {
+        if(!$value) {
+            return view($address);
+        }else return view($address)->with('value', $value);
+    }
 }
