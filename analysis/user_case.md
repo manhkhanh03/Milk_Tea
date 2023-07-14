@@ -6,7 +6,7 @@
 - Đăng ký, đăng nhập tài khoản thường -> ok
 - Xem sản phẩm -> ok
 - Đặt hàng -> ...
-- Thêm vào giỏ hàng
+- Thêm vào giỏ hàng -> ...
 - Thanh toán 
 - Theo dõi đơn hàng
 - Nhận thông báo về đơn hàng --*: functional testing
