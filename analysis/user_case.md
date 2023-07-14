@@ -3,8 +3,8 @@
 ## GD1
 ### Phân tích chức năng và tính năng trang web (Roles)
 ##### Người dùng(Users)
-- Đăng ký, đăng nhập tài khoản thường
-- Xem sản phẩm
+- Đăng ký, đăng nhập tài khoản thường -> ok
+- Xem sản phẩm -> ...
 - Đặt hàng
 - Thêm vào giỏ hàng
 - Thanh toán 

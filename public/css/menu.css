@@ -13,7 +13,6 @@ li.container__child-product__item {
     position: relative;
     transition: all .25s ease;
     overflow: hidden;
-    display: none;
 }
 
 li.container__child-product__item:hover {
@@ -31,7 +30,7 @@ li.container__child-product__item:hover .description__price-total {
 }
 
 .container__child-product__item-img {
-    background-image: url(https://toigingiuvedep.vn/wp-content/uploads/2021/06/hinh-anh-tra-sua-dep-xinh.jpg);
+    /* background-image: url(https://toigingiuvedep.vn/wp-content/uploads/2021/06/hinh-anh-tra-sua-dep-xinh.jpg); */
     height: 270px;
     display: block;
     background-size: cover;
@@ -52,7 +51,7 @@ li.container__child-product__item .description__price-total {
 
 .container__child-pagination {
     margin: 30px 0;
-    width: 30%;
+    width: max-content;
     display: flex;
     justify-content: space-between;
 }
@@ -67,6 +66,7 @@ li.container__child-pagination__item,
     align-items: center;
     justify-content: center;
     display: flex;
+    margin: 0 30px;
 }
 
 li.container__child-pagination__item i {

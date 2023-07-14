@@ -18,6 +18,8 @@ return new class extends Migration
             $table->decimal('total', 20, 2)->default(0);
             $table->text('shipping_address');
             $table->timestamps();
+
+            $table->foreign('product_size_flavor_id')->references('id')->on('product_size_flavors');
         });
     }
 

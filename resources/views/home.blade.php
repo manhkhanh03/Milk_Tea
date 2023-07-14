@@ -28,7 +28,7 @@
                         delicious and enjoyable beverage, offering relaxation and satisfaction to the taste buds.
                     </p>
                     <button>
-                        <a href="menu.html">View Full Menu</a>
+                        <a href="menu/products">View Full Menu</a>
                     </button>
                 </div>
             </div>
@@ -200,8 +200,6 @@
                 card_type_img: '.container__info .list-type-img .list-type-img__child',
                 quantity: 3,
             })
-
-            handleInfomartionUser('.login__user')
         </script>
     @endpush
     @parent

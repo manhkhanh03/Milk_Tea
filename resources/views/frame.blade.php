@@ -21,12 +21,12 @@
             </div>
             <ul class="menu__navbar">
                 <li class="menu__navbar-item">
-                    <a href="index.html">
+                    <a href="{{$url_web}}/home">
                         Home
                     </a>
                 </li>
                 <li class="menu__navbar-item">
-                    <a href="menu.html">
+                    <a href="{{$url_web}}/menu/products">
                         Menu
                     </a>
                 </li>
@@ -55,6 +55,7 @@
         </menu>
     @show
 
+    @stack('banner')
     @section('slider')
         <div class="slider">
             <div class="slider__slide slider__slide--active" data-slide="1">
@@ -64,7 +65,7 @@
                 <div class="slider__inner">
                     <div class="slider__content">
                         <h1 style="font-family: var(--font-family-title); color: var(--color-title);">Welcome</h1><a
-                            href="menu.html" class="go-to-next">Order Now</a>
+                            href="menu/products" class="go-to-next">Order Now</a>
                     </div>
                 </div>
             </div>
@@ -75,7 +76,7 @@
                 <div class="slider__inner">
                     <div class="slider__content">
                         <h1 style="font-family: var(--font-family-title); color: var(--color-title);">Welcome</h1><a
-                            href="menu.html" class="go-to-next">Order Now</a>
+                            href="menu/products" class="go-to-next">Order Now</a>
                     </div>
                 </div>
             </div>
@@ -86,7 +87,7 @@
                 <div class="slider__inner">
                     <div class="slider__content">
                         <h1 style="font-family: var(--font-family-title); color: var(--color-title);">Welcome</h1><a
-                            href="menu.html" class="go-to-next">Order Now</a>
+                            href="menu/products" class="go-to-next">Order Now</a>
                     </div>
                 </div>
             </div>

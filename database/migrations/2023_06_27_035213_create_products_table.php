@@ -14,12 +14,15 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('name', 120);
+            $table->unsignedBigInteger('vendor_id');
             $table->longText('url_video')->nullable();
             $table->longText('description')->nullable();
             $table->boolean('limit_product')->default(false);
             $table->boolean('sold_out')->default(false);
-            $table->boolean('approved')->default(false);    
+            $table->boolean('approved')->default(false);
             $table->timestamps();
+
+            $table->foreign('vendor_id')->references('id')->on('users');
         });
     }
 

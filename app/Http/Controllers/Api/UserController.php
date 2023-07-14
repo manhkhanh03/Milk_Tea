@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Firebase\JWT\JWT;
+use Illuminate\Http\Response;
 
 class UserController extends Controller
 {

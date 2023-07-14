@@ -3,7 +3,6 @@
 
 let user = {}
 let token;
-
 const URLWeb = window.location.protocol + "//" + window.location.hostname + ':' + window.location.port
 const optionsApi = {
     method: 'POST',
@@ -11,6 +10,7 @@ const optionsApi = {
         'Content-Type': 'application/json',
     }
 }
+handleInfomartionUser('.login__user')
 
 function handleScroll(options) {
     window.onscroll = () => {
@@ -44,9 +44,16 @@ function handleNumbers(number, nameAttribute) {
     }, interval);
 }
 
-function isActive(options, element, index) {
+function isActive(options, element, currentIndex) {
+    if (typeof (options.handleMovePage) == 'function') {
+        console.log(currentIndex)
+        options.handleMovePage({
+            nextPage: currentIndex,
+            perPage: options.quantity,
+        })
+    }
     const listImg = document.querySelectorAll(options.card_type_img);
-    const startPagination = options.quantity * index
+    const startPagination = options.quantity * currentIndex
     const endPagination = options.quantity + startPagination;
 
     document.querySelector(options.card_type + '.active').classList.remove('active');
@@ -56,66 +63,54 @@ function isActive(options, element, index) {
     listActiveRemove.forEach((img) => {
         img.classList.remove('active');
     })
+
+
     Array.from(listImg).filter((img, key) => {
         return endPagination > key && startPagination <= key
-    }).forEach(img => img.classList.add('active'));;
+    }).forEach((img, i) =>
+        img.classList.add('active')
+    );
 }
 
 const eventMove = function (options, listType) {
 
     const next = document.querySelector(options.event.next).parentElement
     const prev = document.querySelector(options.event.prev).parentElement
-    let index;
     let element
     let moveElement
 
-    function isIndex(selector, typeIndex) {
-        return Array.from(selector).reduce((acc, ele, i) => {
-            if (ele.classList.contains('active')) {
-                if (typeIndex) {
-                    acc = i + 1
-                    if (ele.nextElementSibling.classList.contains('__other'))
-                        acc = i + 2
-                } else {
-                    acc = i - 1
-                    if (ele.previousElementSibling.classList.contains('__other'))
-                        acc = i - 2
-                }
-            }
-            return acc;
-        }, 0);
-    }
+    element = document.querySelector(options.card_type + '.active')
+    let currentIndex = element.getAttribute(options.attributes);
 
     next.onclick = () => {
-        element = document.querySelector(options.card_type + '.active')
-        index = isIndex(document.querySelectorAll(options.card_type), true)
-        if (index < listType.length - 1 && index >= 0) {
-            moveElement = document.querySelector(options.cardTypeParent).querySelector(`:nth-child(${index + 1})`)
-            isActive(options, moveElement, index - 1)
+        currentIndex++
+        if (currentIndex < listType.length && currentIndex >= 0) {
+            console.log(currentIndex)
+            if (!(currentIndex === listType.length)) {
+                moveElement = document.querySelector(options.cardTypeParent).querySelector(`:nth-child(${currentIndex + 1})`)
+                isActive(options, moveElement, currentIndex)
+            }
         }
     }
 
     prev.onclick = () => {
-        element = document.querySelector(options.card_type + '.active')
-        index = isIndex(document.querySelectorAll(options.card_type), false)
-        if (index > 0) {
-            moveElement = document.querySelector(options.cardTypeParent).querySelector(`:nth-child(${index + 1})`)
-            isActive(options, moveElement, index - 1)
+        currentIndex--
+        if (currentIndex > 0) {
+            moveElement = document.querySelector(options.cardTypeParent).querySelector(`:nth-child(${currentIndex + 1})`)
+            isActive(options, moveElement, currentIndex)
         }
     }
 }
 
 function handlePagination(options) {
     const listType = document.querySelectorAll(options.card_type);
-
+    console.log(listType)
     listType.forEach((element, index) => {
         element.onclick = () => {
-            if (element.previousElementSibling) {
-                if (!element.classList.contains('__other') && !element.previousElementSibling.classList.contains('__other'))
-                    isActive(options, element, index)
-                else if (!element.classList.contains('__other') && element.previousElementSibling.classList.contains('__other'))
-                    isActive(options, element, index - 1)
-            } else isActive(options, element, index)
+            if (options.event) {
+                isActive(options, element, element.getAttribute(options.attributes));
+            } else
+                isActive(options, element, index)
         }
     });
 
@@ -158,7 +153,7 @@ function handleApiMethodGet(options) {
 
 // ??????????????????????????????
 
-function handleInfomartionUser(selector) {
+function handleInfomartionUser(selector = '') {
     handleApiMethodGet({
         urlApi: `/api/user/token`,
         handleDataGet: function (data, options) {
@@ -172,7 +167,7 @@ function handleInfomartionUser(selector) {
                 is_seller_restricted: data.user.is_seller_restricted,
             }
 
-            if (Object.keys(user).length != 0) {
+            if (Object.keys(user).length != 0 && selector) {
                 handleUser({
                     selector: selector,
                     user: user,
@@ -183,8 +178,6 @@ function handleInfomartionUser(selector) {
 }
 
 function handleUser(options) {
-    console.log(options)
-
     const parentElement = document.querySelector(options.selector)
     console.log(parentElement)
     parentElement.innerHTML = `
