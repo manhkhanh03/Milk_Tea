@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('discount_codes', function (Blueprint $table) {
             $table->id();
             $table->string('code', 100);
-            $table->integer('discount_amount');
-            $table->string('type_discount_amount', 100); // vnd, %
-            $table->dateTime('start_date')->default(now());
-            $table->dateTime('end_date')->default(now());
+            $table->float('discount_amount');
+            $table->string('type_discount_amount', 100); // $, %
+            $table->dateTime('start_date')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->dateTime('end_date')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->boolean('applies_to_all_products')->default(false);
             $table->timestamps();
         });

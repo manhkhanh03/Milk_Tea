@@ -8,6 +8,8 @@ use App\Models\Product;
 use App\Models\ProductImages;
 use App\Models\User;
 use App\Models\ProductSizeFlavors;
+use App\Models\DiscountCodeHasProduct;
+use App\Models\DiscountCode;
 
 class ProductController extends Controller
 {
@@ -117,13 +119,27 @@ class ProductController extends Controller
             ->selectRaw('count(product_id) as total')
             ->get();
 
-        $discount_code = 
+        $current_date = date('Y-m-d H:i:s');
+        $discount_codes = DiscountCodeHasProduct::join('discount_codes', 'discount_code_has_products.discount_code_id', 
+            '=', 'discount_codes.id')
+            ->where('product_id', $id)
+            ->where('start_date', '<=', $current_date)
+            ->where('end_date', '>=', $current_date)
+            ->get();
+
+        $web_discount_codes = DiscountCode::where('applies_to_all_products', 1)
+            ->where('start_date', '<=', $current_date)
+            ->where('end_date', '>=', $current_date)
+            ->get();
+
         // A collection includes a key and a value.
         $collection = collect(['sizes' => $sizes]);
         $collection->put('user', $user);
         $collection->put('flavors', $flavors);
         $collection->put('images', $images);
         $collection->put('sold', $sold);
+        $collection->put('shop_discount_codes', $discount_codes);
+        $collection->put('web_discount_codes', $web_discount_codes);
         $result = $collection->merge($product);
 
         return response()->json($result, 200, ['OK']);

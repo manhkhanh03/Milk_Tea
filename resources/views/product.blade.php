@@ -54,14 +54,19 @@
                 </ul>
                 <div class="__information-product">
                     <span class="price" style="color: var(--color-title);">{{count($product->sizes) - 1 == 0 ? '' : $product->sizes[count($product->sizes) - 1]->price. '$' . ' - '}} {{$product->sizes[0]->price. '$'}}</span>
-                    <span class="discount-codes-web"
-                        style="color: var(--color-title); font-size: 14px; margin-left: 10px;">web discount code</span>
+                    
+                    @foreach ($product->web_discount_codes as $dc)
+                    <span class="discount-codes-web" style="color: var(--color-title); font-size: 14px; margin-left: 10px;"> Sale {{$dc->type_discount_amount == '%' ? $dc->discount_amount. '%' : $dc->discount_amount. '$'}}</span>
+                    @endforeach
                 </div>
     
                 <ul class="__information-product">
                     <span>Shop discount codes:</span>
-                    <li class="__discount-codes__item">-15%</li>
-                    <li class="__discount-codes__item">-0.5$</li>
+                    {{-- <li class="__discount-codes__item">-15%</li>
+                    <li class="__discount-codes__item">-0.5$</li> --}}
+                    @foreach ($product->shop_discount_codes as $dc) 
+                        <li class="__discount-codes__item">{{$dc->type_discount_amount == '%' ? $dc->discount_amount. '%' : $dc->discount_amount. '$'}}</li>
+                    @endforeach
                 </ul>
     
                 <div class="__information-product">
