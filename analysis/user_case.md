@@ -17,9 +17,6 @@
 - Đăng ký tài khoản nhà cung cấp
 - Đăng ký tài khoản nhân viên giao hàng
 - Theo dõi lịch sử mua hàng
-##### Khách hàng (Customers - Anonymous_Customer)
-- Có các quyền của Users (trừ đánh giá và bình luận cho sản phẩm nhất định)
-- Đặt hàng không cần tạo tài khoản
 ##### Nhà cung cấp(Vendors)
 - Có toàn bộ quyền của Users
     ###### Quản lý sản phẩm
