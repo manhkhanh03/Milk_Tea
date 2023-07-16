@@ -5,15 +5,14 @@
 ##### Người dùng(Users)
 - Đăng ký, đăng nhập tài khoản thường -> ok
 - Xem sản phẩm -> ok
-- Đặt hàng -> ...
-- Thêm vào giỏ hàng -> ...
-- Thanh toán 
+- Đặt hàng -> ... Thanh toán -> ...
+- Thêm vào giỏ hàng -> ok
 - Theo dõi đơn hàng
 - Nhận thông báo về đơn hàng --*: functional testing
 - Cập nhật thông tin
 - Đánh giá, bình luận sản phẩm
-- Thả cảm xúc với sản phẩm yêu thích
-- Nhắn tin
+- Thả cảm xúc với sản phẩm yêu thích  -> ...
+- Nhắn tin với nhà cung cấp
 - Đăng ký tài khoản nhà cung cấp
 - Đăng ký tài khoản nhân viên giao hàng
 - Theo dõi lịch sử mua hàng
