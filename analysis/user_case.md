@@ -4,22 +4,18 @@
 ### Phân tích chức năng và tính năng trang web (Roles)
 ##### Người dùng(Users)
 - Đăng ký, đăng nhập tài khoản thường -> ok
-- Xem sản phẩm -> ...
-- Đặt hàng
-- Thêm vào giỏ hàng
-- Thanh toán 
+- Xem sản phẩm -> ok
+- Đặt hàng -> ... Thanh toán -> ...
+- Thêm vào giỏ hàng -> ok
 - Theo dõi đơn hàng
 - Nhận thông báo về đơn hàng --*: functional testing
 - Cập nhật thông tin
 - Đánh giá, bình luận sản phẩm
-- Thả cảm xúc với sản phẩm yêu thích
-- Nhắn tin
+- Thả cảm xúc với sản phẩm yêu thích  -> ...
+- Nhắn tin với nhà cung cấp
 - Đăng ký tài khoản nhà cung cấp
 - Đăng ký tài khoản nhân viên giao hàng
 - Theo dõi lịch sử mua hàng
-##### Khách hàng (Customers - Anonymous_Customer)
-- Có các quyền của Users (trừ đánh giá và bình luận cho sản phẩm nhất định)
-- Đặt hàng không cần tạo tài khoản
 ##### Nhà cung cấp(Vendors)
 - Có toàn bộ quyền của Users
     ###### Quản lý sản phẩm
