@@ -33,6 +33,7 @@ function handleImport(options) {
         return !errorMessage
     }
 
+    // btn mặc định của form
     formElement.onsubmit = (e) => {
         e.preventDefault();
         
@@ -55,6 +56,34 @@ function handleImport(options) {
 
             options.isSuccess(data)
         }
+    }
+
+    // btn ở bên ngoài
+    const otherBtn = document.querySelector(options.btnOther)
+    if (otherBtn) { 
+        otherBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+
+            let isCheckInput = true;
+
+            const inputElement = formElement.querySelectorAll('input:not([disabled])' + options.formInput)
+            options.rules.forEach((rule, index) => {
+                const ruleElement = formElement.querySelector(rule.selector)
+                let isValidate = validate(rule, ruleElement)
+                if (!isValidate) {
+                    isCheckInput = false;
+                }
+            })
+
+            if (isCheckInput) {
+                const data = {}
+                Array.from(inputElement).forEach(ele => {
+                    data[ele.getAttribute('id')] = ele.value
+                })
+
+                options.isSuccess(data)
+            }
+        })
     }
 
     options.rules.forEach((rule, index) => {

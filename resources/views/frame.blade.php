@@ -41,12 +41,12 @@
                     </a>
                 </li>
                 <li class="menu__navbar-item">
-                    <a href="">
+                    <a href="{{$url_web}}/cart">
                         <img src="/img/bag.png" alt="" class="icon">
                     </a>
                 </li>
                 <li class="menu__navbar-item login__user">
-                    <a href="login" class="menu__navbar-item__icon">
+                    <a href="{{$url_web}}/login" class="menu__navbar-item__icon">
                         <img style="margin-right: 6px" src="/img/user.png" alt="" class="icon">
                         <span></span>
                     </a>

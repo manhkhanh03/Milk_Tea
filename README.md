@@ -1,66 +1,90 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+## Server environment
++ `Apache or Nginx`
++ `PHP >= 7.3`
++ `MySQL >=5.7`
++ `Nodejs >= v12.22.7` [https://nodejs.org/en/download/]
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## =====================================================================
 
-## About Laravel
+## Laravel document: 
+- https://laravel.com/docs/8.x/installation
+- https://laravel.com/docs/4.2/quick
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## ======================================================================
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## INSTALLATION for PRODUCTION
+- Clone project and cd to project directory
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- Run `cp .env.example .env`
 
-## Learning Laravel
+- Create new database in mysql
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- Config App url, environment, database connection, mailer in file `.env`
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+- Run `composer install` [install all Packagist to vendor folder]
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- Run `php artisan key:generate`
 
-## Laravel Sponsors
+- Run `php artisan migrate` [Create a table in an already created database]
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+- Run `php artisan db:seed` [import data default]
 
-### Premium Partners
+- Run `php artisan storage:link` [Public storage folder]
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+- Run `npm install`
 
-## Contributing
+- Run `npm run prod` or `npm run production`
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
 
-## Code of Conduct
+## Typically, you may use a web server such as Apache or Nginx to serve your Laravel applications. If you are on PHP 5.4+ and would like to use PHP's built-in development server, you may use the serve Artisan command:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+- `php artisan serve`
 
-## Security Vulnerabilities
+You can run site with link: http://127.0.0.1:8000 or http://localhost:8000
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
-## License
+## By default the HTTP-server will listen to port 8000. However if that port is already in use or you wish to serve multiple applications this way, you might want to specify what port to use. Just add the --port argument:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- `php artisan serve --port=8080`
+
+You can run site with link: http://127.0.0.1:8080` or `http://localhost:8080
+
+## ============================================================================
+
+## For Local development
+
+- Install software in guide `local/README`
+
+- Start Development server by running command `vagrant up`
+
+- Stop server by command `vagrant halt`
+- Access SSH server by command `vagrant ssh`
+- Project path (in development server) is `/workplace`
+- Seed example data by command `php artisan db:seed`
+- Build assets (js/css) by command `npm run dev`
+- Watching assets change by command `npm run watch-poll`
+- Ide helper by command `php artisan ide-helper:generate` and `php artisan ide-helper:meta`
+
+## =============================================================================
+About Netsuite
+http://www.netsuite.com/help/helpcenter/en_US/srbrowser/Browser2017_1/schema/record/salesorder.html?mode=package
+
+https://hotexamples.com/examples/-/NetSuiteService/-/php-netsuiteservice-class-examples.html
+
+Amazon API document:
+https://developer-docs.amazon.com/sp-api/docs/feeds-api-v2021-06-30-use-case-guide
+https://developer-docs.amazon.com/sp-api/docs/feed-type-values 
+https://images-na.ssl-images-amazon.com/images/G/01/rainier/help/xsd/release_4_1/OrderFulfillment.xsd
+
+Amazon API SDK:
+https://github.com/jlevers/selling-partner-api/tree/main/docs/Api
+https://github.com/jlevers/selling-partner-api/blob/main/docs/Model/Feeds/CreateFeedSpecification.md 
+
+Mirak API:
+Document: https://catch-dev.mirakl.net/help/api-doc/seller/mmp.html
+SDK:
+https://github.com/mirakl/sdk-php-shop
+
+Bat dau khoi tao react
+
+npm ci && npm run dev

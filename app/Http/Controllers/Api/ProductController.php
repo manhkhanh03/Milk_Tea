@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
-use App\Models\ProductImages;
+use App\Models\ProductImage;
 use App\Models\User;
-use App\Models\ProductSizeFlavors;
+use App\Models\ProductSizeFlavor;
 use App\Models\DiscountCodeHasProduct;
 use App\Models\DiscountCode;
 
@@ -26,14 +26,14 @@ class ProductController extends Controller
         $products = json_decode($products, true);
             
         foreach ($products as &$value) {
-            $prices = ProductSizeFlavors::where('product_id', $value['id'])
+            $prices = ProductSizeFlavor::where('product_id', $value['id'])
                 ->select('price')
                 ->get();
-            $images = ProductImages::where('product_id', $value['id'])
+            $images = ProductImage::where('product_id', $value['id'])
                 ->select('url')
                 ->get();
 
-            $sold = ProductSizeFlavors::join('orders', 'product_size_flavors.id', '=', 'orders.product_size_flavor_id')
+            $sold = ProductSizeFlavor::join('orders', 'product_size_flavors.id', '=', 'orders.product_size_flavor_id')
                 ->where('product_id', $value['id'])
                 ->selectRaw('count(product_id) as total')
                 ->get();
@@ -64,16 +64,16 @@ class ProductController extends Controller
         $products = json_decode($products, true);
             
         foreach ($products as &$value) {
-            $prices = ProductSizeFlavors::where('product_id', $value['id'])
+            $prices = ProductSizeFlavor::where('product_id', $value['id'])
                 ->select('price')
                 ->get();
 
-            $sold = ProductSizeFlavors::join('orders', 'product_size_flavors.id', '=', 'orders.product_size_flavor_id')
+            $sold = ProductSizeFlavor::join('orders', 'product_size_flavors.id', '=', 'orders.product_size_flavor_id')
                 ->where('product_id', $value['id'])
                 ->selectRaw('count(product_id) as total')
                 ->get();
 
-            $images = ProductImages::where('product_id', $value['id'])
+            $images = ProductImage::where('product_id', $value['id'])
                 ->select('url')
                 ->get();
             $user = User::where('id', '=', $value['vendor_id'])->first();
@@ -99,22 +99,22 @@ class ProductController extends Controller
     public function show(string $id)
     {
         $product = Product::where('products.id', '=', $id)->first();
-        $sizes = ProductSizeFlavors::join('sizes', 'product_size_flavors.size_id', '=', 'sizes.id')
+        $sizes = ProductSizeFlavor::join('sizes', 'product_size_flavors.size_id', '=', 'sizes.id')
             ->where('product_id', '=', $id)
             ->select('product_id', 'size_id', 'price', 'name', 'size')
             ->get();
         $user = User::where('id', '=', $product->vendor_id)->first();
-        $flavors = ProductSizeFlavors::join('flavors', 'product_size_flavors.flavor_id', '=', 'flavors.id')
+        $flavors = ProductSizeFlavor::join('flavors', 'product_size_flavors.flavor_id', '=', 'flavors.id')
             ->where('product_id', '=', $id)
             ->groupBy('product_id', 'flavor_id', 'flavors.name', 'type')
             ->select('product_id', 'flavor_id', 'flavors.name', 'type')
             ->get();
 
-        $images = ProductImages::where('product_id', $id)
+        $images = ProductImage::where('product_id', $id)
             ->select('url')
             ->get();
 
-        $sold = ProductSizeFlavors::join('orders', 'product_size_flavors.id', '=', 'orders.product_size_flavor_id')
+        $sold = ProductSizeFlavor::join('orders', 'product_size_flavors.id', '=', 'orders.product_size_flavor_id')
             ->where('product_id', $id)
             ->selectRaw('count(product_id) as total')
             ->get();
@@ -125,11 +125,13 @@ class ProductController extends Controller
             ->where('product_id', $id)
             ->where('start_date', '<=', $current_date)
             ->where('end_date', '>=', $current_date)
+            ->select('type_discount_amount', 'discount_amount', 'discount_codes.id')
             ->get();
 
         $web_discount_codes = DiscountCode::where('applies_to_all_products', 1)
             ->where('start_date', '<=', $current_date)
             ->where('end_date', '>=', $current_date)
+            ->select('type_discount_amount', 'discount_amount')
             ->get();
 
         // A collection includes a key and a value.

@@ -79,7 +79,7 @@ class UserController extends Controller
     {
         $token = $request->Cookie('token');
         try {
-            $payload = JWTAuth::parseToken()->getPayload();
+            $payload = JWTAuth::setToken($token)->getPayload();
             $user = Auth::guard('api')->authenticate();
             return response()->json(['payload' => $payload, 'user' => $user], 200);
         } catch (\Exception $e) {

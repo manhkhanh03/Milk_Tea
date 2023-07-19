@@ -62,23 +62,18 @@
     
                 <ul class="__information-product">
                     <span>Shop discount codes:</span>
-                    {{-- <li class="__discount-codes__item">-15%</li>
-                    <li class="__discount-codes__item">-0.5$</li> --}}
                     @foreach ($product->shop_discount_codes as $dc) 
-                        <li class="__discount-codes__item">{{$dc->type_discount_amount == '%' ? $dc->discount_amount. '%' : $dc->discount_amount. '$'}}</li>
+                        <li class="__discount-codes__item" data-discount="{{$dc->id}}">{{$dc->type_discount_amount == '%' ? $dc->discount_amount. '%' : $dc->discount_amount. '$'}}</li>
                     @endforeach
                 </ul>
     
                 <div class="__information-product">
                     <span>Flavors</span>
                     <div class="__box-flavors product-flavors">
-                        <span class="__is-flavor" style="">Select:</span>
+                        <span class="__is-flavor flavor" style="">Select:</span>
                         <ul class="__list-flavors">
-                            {{-- <li class="__flavor-item">Chocolate</li>
-                            <li class="__flavor-item">Mango</li>
-                            <li class="__flavor-item">Orange</li> --}}
                             @foreach ($product->flavors as $flavor)
-                                <li class="__flavor-item">{{$flavor->name}}</li>
+                                <li class="__flavor-item" data-type="{{$flavor->flavor_id}}">{{$flavor->name}}</li>
                             @endforeach
                         </ul>
                     </div>
@@ -87,13 +82,10 @@
                 <div class="__information-product ">
                     <span>Sizes</span>
                     <div class="__box-flavors product-sizes">
-                        <span class="__is-flavor" style="">Select:</span>
+                        <span class="__is-flavor __size" style="">Select:</span>
                         <ul class="__list-flavors">
-                            {{-- <li class="__flavor-item">S: small</li>
-                            <li class="__flavor-item">M: medium</li>
-                            <li class="__flavor-item">L: large</li> --}}
                             @foreach ($product->sizes as $size)
-                                <li class="__flavor-item">{{$size->name}}</li>
+                                <li class="__flavor-item" data-type="{{$size->size_id}}">{{$size->name}}</li>
                             @endforeach
                         </ul>
                     </div>
@@ -114,11 +106,14 @@
     
                 <div class="__information-product">
                     <div class="__cart">
-                        <div class="_cart-add-cart">
+                        <div data-product="{{$product->id}}" class="_cart-add-cart">
                             <i class="fa-solid fa-cart-plus"></i>
                             <p>Add to cart</p>
                         </div>
-                        <button class="btn-buy-now">Buy now</button>
+                        <button data-product="{{$product->id}}" class="btn-buy-now" id="btn-buy-now">
+                            <a >Buy now</a>
+                            {{-- <a href="{{$url_web}}/menu/products/checkout">Buy now</a> --}}
+                        </button>
                     </div>
                 </div>
     
@@ -135,102 +130,32 @@
                     </button>
                 </div>
                 <ul class="relevant-products__child">
-                    <li class="container__child-product__item">
-                        <a style="display: block; height: 100%;">
-                            <div style="height: 270px; overflow: hidden;">
-                                <p class="container__child-product__item-img"
-                                    style="background-image: url(https://th.bing.com/th/id/OIP.7IZF6hng2J3XP_7dj-IrSwHaLG?pid=ImgDet&rs=1)">
-                                </p>
-                            </div>
-                            <div class="container__child-product__item-description">
-                                <h2
-                                    style="margin: 18px 0; font-size: 18px; text-overflow: ellipsis; overflow: hidden; -webkit-box-orient: vertical; display: -webkit-box; -webkit-line-clamp: 2;">
-                                    $product['name']</h2>
-                                <p
-                                    style="color: var(--color-light); text-overflow: ellipsis; overflow: hidden; -webkit-box-orient: vertical; display: -webkit-box; -webkit-line-clamp: 2;">
-                                    $product['user']['address']</p>
-                                <div class="description__price-total" style="color: var(--color-light);">
-                                    <p class="price" style="color: var(--color-light);">
-                                        $product['prices'][count($product['prices']) -
-                                        1]['price'] $
+                    @foreach ($products as $prd)
+                        <li class="container__child-product__item">
+                            <a href="{{$url_web}}/menu/products/product/{{str_replace(' ', '-', $prd['name'])}}?name={{$prd['name']}}&product={{$prd['id']}}" style="display: block; height: 100%;">
+                                <div style="height: 270px; overflow: hidden;">
+                                    <p class="container__child-product__item-img"
+                                        style="background-image: url({{$prd['images'][0]['url']}})">
                                     </p>
-                                    <p class="total" style="color: var(--color-light);">$product['sales'] Sold</p>
                                 </div>
-                            </div>
-                        </a>
-                    </li>
-                    <li class="container__child-product__item">
-                        <a style="display: block; height: 100%;">
-                            <div style="height: 270px; overflow: hidden;">
-                                <p class="container__child-product__item-img"
-                                    style="background-image: url(https://th.bing.com/th/id/OIP.7IZF6hng2J3XP_7dj-IrSwHaLG?pid=ImgDet&rs=1)">
-                                </p>
-                            </div>
-                            <div class="container__child-product__item-description">
-                                <h2
-                                    style="margin: 18px 0; font-size: 18px; text-overflow: ellipsis; overflow: hidden; -webkit-box-orient: vertical; display: -webkit-box; -webkit-line-clamp: 2;">
-                                    $product['name']</h2>
-                                <p
-                                    style="color: var(--color-light); text-overflow: ellipsis; overflow: hidden; -webkit-box-orient: vertical; display: -webkit-box; -webkit-line-clamp: 2;">
-                                    $product['user']['address']</p>
-                                <div class="description__price-total" style="color: var(--color-light);">
-                                    <p class="price" style="color: var(--color-light);">
-                                        $product['prices'][count($product['prices']) -
-                                        1]['price'] $
-                                    </p>
-                                    <p class="total" style="color: var(--color-light);">$product['sales'] Sold</p>
+                                <div class="container__child-product__item-description">
+                                    <h2
+                                        style="margin: 18px 0; font-size: 18px; text-overflow: ellipsis; overflow: hidden; -webkit-box-orient: vertical; display: -webkit-box; -webkit-line-clamp: 2;">
+                                        {{$prd['name']}}</h2>
+                                    <p
+                                        style="color: var(--color-light); text-overflow: ellipsis; overflow: hidden; -webkit-box-orient: vertical; display: -webkit-box; -webkit-line-clamp: 2;">
+                                        {{$prd['user']['address']}}</p>
+                                    <div class="description__price-total" style="color: var(--color-light);">
+                                        <p class="price" style="color: var(--color-light);">
+                                            {{$prd['prices'][count($prd['prices']) -
+                                            1]['price']. '$' }}
+                                        </p>
+                                        <p class="total" style="color: var(--color-light);">{{$prd['sold'][0]['total']}} Sold</p>
+                                    </div>
                                 </div>
-                            </div>
-                        </a>
-                    </li>
-                    <li class="container__child-product__item">
-                        <a style="display: block; height: 100%;">
-                            <div style="height: 270px; overflow: hidden;">
-                                <p class="container__child-product__item-img"
-                                    style="background-image: url(https://th.bing.com/th/id/OIP.7IZF6hng2J3XP_7dj-IrSwHaLG?pid=ImgDet&rs=1)">
-                                </p>
-                            </div>
-                            <div class="container__child-product__item-description">
-                                <h2
-                                    style="margin: 18px 0; font-size: 18px; text-overflow: ellipsis; overflow: hidden; -webkit-box-orient: vertical; display: -webkit-box; -webkit-line-clamp: 2;">
-                                    $product['name']</h2>
-                                <p
-                                    style="color: var(--color-light); text-overflow: ellipsis; overflow: hidden; -webkit-box-orient: vertical; display: -webkit-box; -webkit-line-clamp: 2;">
-                                    $product['user']['address']</p>
-                                <div class="description__price-total" style="color: var(--color-light);">
-                                    <p class="price" style="color: var(--color-light);">
-                                        $product['prices'][count($product['prices']) -
-                                        1]['price'] $
-                                    </p>
-                                    <p class="total" style="color: var(--color-light);">$product['sales'] Sold</p>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
-                    <li class="container__child-product__item">
-                        <a style="display: block; height: 100%;">
-                            <div style="height: 270px; overflow: hidden;">
-                                <p class="container__child-product__item-img"
-                                    style="background-image: url(https://th.bing.com/th/id/OIP.7IZF6hng2J3XP_7dj-IrSwHaLG?pid=ImgDet&rs=1)">
-                                </p>
-                            </div>
-                            <div class="container__child-product__item-description">
-                                <h2
-                                    style="margin: 18px 0; font-size: 18px; text-overflow: ellipsis; overflow: hidden; -webkit-box-orient: vertical; display: -webkit-box; -webkit-line-clamp: 2;">
-                                    $product['name']</h2>
-                                <p
-                                    style="color: var(--color-light); text-overflow: ellipsis; overflow: hidden; -webkit-box-orient: vertical; display: -webkit-box; -webkit-line-clamp: 2;">
-                                    $product['user']['address']</p>
-                                <div class="description__price-total" style="color: var(--color-light);">
-                                    <p class="price" style="color: var(--color-light);">
-                                        $product['prices'][count($product['prices']) -
-                                        1]['price'] $
-                                    </p>
-                                    <p class="total" style="color: var(--color-light);">$product['sales'] Sold</p>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
+                            </a>
+                        </li>
+                    @endforeach
                 </ul>
             </div>
         </div>
@@ -246,8 +171,8 @@
 <script>
     handleEventQuantityProduct({
         selector: {
-        next: '.quantity-plus',
-        prev: '.quantity-minus'
+            next: '.quantity-plus',
+            prev: '.quantity-minus'
         },
         input: '#quantity',
     })
@@ -255,13 +180,15 @@
     handleEventSelectedProduct({
         selector: '.product-flavors',
         item: '.__flavor-item',
-        input: '.__is-flavor'
+        input: '.__is-flavor',
+        attribute: 'data-type',
     })
     
     handleEventSelectedProduct({
         selector: '.product-sizes',
         item: '.__flavor-item',
-        input: '.__is-flavor'
+        input: '.__is-flavor',
+        attribute: 'data-type',
     })
     
     handleEventChangeImageMain({
@@ -270,10 +197,79 @@
         imageList: '.__small-item',
     })
 
+    // add to cart
+    handleAddToCart({
+        btn: '._cart-add-cart',
+        flavor: '.__is-flavor.flavor',
+        size: '.__size',
+        quantity: '#quantity',
+        attribute: 'data-active',
+        attributeProduct: 'data-product',
+        handle: function(data, options) {
+            handleApiMethodPost({
+                urlApi: '/api/cart',
+                data: {
+                    size_id: data.size,
+                    flavor_id: data.flavor,
+                    product_id: data.product,
+                    user_id: user.userId,
+                    quantity: data.quantity,
+                },
+                handle: function (data, options) {
+                    if(!data.message) {
+                        alert('Successfully added to cart')
+                    }else alert('Failed to add to cart')
+                }
+            })
+        }
+    })
 
-    // handleApiMethodGet({
-    //     urlApi: `/api/product/${idProduct}`,
-    // })
+    handleAddToCart({
+        btn: '#btn-buy-now',
+        flavor: '.__is-flavor.flavor',
+        size: '.__size',
+        discount: '.__information-product .__discount-codes__item.active',
+        quantity: '#quantity',
+        attribute: 'data-active',
+        attributeDiscount: 'data-discount',
+        attributeProduct: 'data-product',
+        handle: function(data, options) {
+            console.log(data)
+
+            if(Object.keys(user).length != 0) {
+                handleApiMethodPost({
+                    urlApi: '/api/order/token',
+                    data: {
+                        size_id: data.size,
+                        flavor_id: data.flavor,
+                        product_id: data.product,
+                        user_id: user.userId,
+                        quantity: data.quantity,
+                        discount_id: data.discount,
+                        delivery: 0.50,
+                    },
+                    // data: {
+                    //     size_id: {data.size},
+                    //     flavor_id: {data.flavor},
+                    //     product_id: {data.product},
+                    //     user_id: user.userId,
+                    //     quantity: {data.quantity},
+                    //     discount_id: {data.discount},
+                    //     delivery: 0.50,
+                    // },
+                    handle: function (data, options) {
+                        window.location.href = @json($url_web) + '/menu/products/checkout'
+                    }
+                })
+            }else {
+                console.log(user)
+            }
+        }
+    })
+
+    handleDiscount({
+        selector: '.__information-product .__discount-codes__item',
+    })
 </script>
 @endpush
 @parent

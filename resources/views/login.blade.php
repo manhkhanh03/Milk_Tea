@@ -62,9 +62,9 @@
             formInput: '.form-input',
             formMessage: '.form-message',
             rules: [
-                handleImport.isFocus('#username', 'Vui lòng nhập Username'),
-                handleImport.isFocus('#password', 'Vui lòng nhập Password'),
-                handleImport.isPassword('#password', 'Password ít nhất 8 ký tự'),
+                handleImport.isFocus('#username', 'Please enter your Username'),
+                handleImport.isFocus('#password', 'Please enter your Password'),
+                handleImport.isPassword('#password', 'Password must be at least 8 characters long'),
             ],
             isSuccess: function (data) {
                 const newData = {
@@ -80,8 +80,7 @@
                         handleApiMethodPost.isSelectorFail('#username', 'Username already exists'),
                         handleApiMethodPost.isSelectorFail('#password', 'Passwords do not match'),
                     ],
-                    handle: function(data, options, currentResponse) {
-                        var token = currentResponse.headers.get('Authorization');
+                    handle: function(data, options) {
                         if (data.status) {
                             options.cases.forEach((myCase) => {
                                 const caseElement = document.querySelector(myCase.selector)
@@ -92,13 +91,6 @@
                                 } else messageElement.innerText = ''
                             })
                         } else {
-                            userId = data.id 
-                            userName = data.user_name;
-                            address = data.address;
-                            phone = data.phone;
-                            email = data.email;
-                            img_user = data.img_user;
-                            is_seller_restricted = 0 ? false : true;
                             window.location.href = URLWeb + options.urlWeb;
                         }
                     }

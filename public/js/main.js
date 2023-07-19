@@ -10,7 +10,52 @@ const optionsApi = {
         'Content-Type': 'application/json',
     }
 }
-handleInfomartionUser('.login__user')
+
+function handleUser(options) {
+    const parentElement = document.querySelector(options.selector)
+    if (parentElement) {
+        parentElement.innerHTML = `
+        <img style="margin-right: 6px" src="${options.user.img_user}" alt="${options.user.userName}" class="icon">
+        <span>${options.user.userName}</span>
+    `
+    }
+}
+
+
+async function handleApiMethodGet(options) {
+    await fetch(URLWeb + options.urlApi)
+        .then((response) => response.json())
+        .then(data => {
+            options.handleDataGet(data, options)
+        })
+}
+
+handleInfomartionUser('.login__user');
+async function handleInfomartionUser(selector = '') {
+    await handleApiMethodGet({
+        urlApi: `/api/user/token`,
+        handleDataGet: function (data, options) {
+            if (!data.error) { 
+                user = {
+                    userId: data.user.id,
+                    userName: data.user.user_name,
+                    address: data.user.address,
+                    phone: data.user.phone,
+                    email: data.user.email,
+                    img_user: data.user.img_user,
+                    is_seller_restricted: data.user.is_seller_restricted,
+                }
+
+                if (Object.keys(user).length != 0 && selector) {
+                    handleUser({
+                        selector: selector,
+                        user: user,
+                    })
+                }
+            }
+        }
+    })
+}
 
 function handleScroll(options) {
     window.onscroll = () => {
@@ -123,13 +168,9 @@ function handleApiMethodPost(options) {
     optionsApi.method = 'POST'
     optionsApi.body = JSON.stringify(options.data)
     fetch(URLWeb + options.urlApi, optionsApi)
-        .then((response) => {
-            return Promise.all([response, response.json()]);
-        })
-        .then(currentData => {
-            const data = currentData[1]
-            const currentResponse = currentData[0]
-            options.handle(data, options, currentResponse)
+        .then(response => response.json())
+        .then(data => {
+            options.handle(data, options)
         })
 }
 
@@ -143,45 +184,3 @@ handleApiMethodPost.isSelectorFail = function (selector, message) {
     }
 }
 
-function handleApiMethodGet(options) {
-    fetch(URLWeb + options.urlApi)
-        .then((response) => response.json())
-        .then(data => {
-            options.handleDataGet(data, options)
-        })
-}
-
-// ??????????????????????????????
-
-function handleInfomartionUser(selector = '') {
-    handleApiMethodGet({
-        urlApi: `/api/user/token`,
-        handleDataGet: function (data, options) {
-            user = {
-                userId: data.user.id,
-                userName: data.user.user_name,
-                address: data.user.address,
-                phone: data.user.phone,
-                email: data.user.email,
-                img_user: data.user.img_user,
-                is_seller_restricted: data.user.is_seller_restricted,
-            }
-
-            if (Object.keys(user).length != 0 && selector) {
-                handleUser({
-                    selector: selector,
-                    user: user,
-                })
-            }
-        }
-    })
-}
-
-function handleUser(options) {
-    const parentElement = document.querySelector(options.selector)
-    console.log(parentElement)
-    parentElement.innerHTML = `
-        <img style="margin-right: 6px" src="${options.user.img_user}" alt="${options.user.userName}" class="icon">
-        <span>${options.user.userName}</span>
-    `
-}

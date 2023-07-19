@@ -18,6 +18,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::prefix('cart')->group(function () {
+    Route::post('', 'App\Http\Controllers\Api\CartController@store');
+    Route::get('/customer', 'App\Http\Controllers\Api\CartController@show_cart');
+});
+
 Route::prefix('user')->group(function () {
     Route::get('', 'App\Http\Controllers\Api\UserController@index');
     Route::get('/token', 'App\Http\Controllers\Api\UserController@decodeToken');
@@ -29,4 +34,10 @@ Route::prefix('user')->group(function () {
 Route::prefix('product')->group(function () {
     Route::get('/{id}', 'App\Http\Controllers\Api\ProductController@show');
     Route::get('/', 'App\Http\Controllers\Api\ProductController@index');
+});
+
+Route::prefix('order')->group(function () {
+    Route::get('/decode_token', 'App\Http\Controllers\Api\OrderController@decodeTokenOrder');
+    Route::post('/token', 'App\Http\Controllers\Api\OrderController@createTokenOrder');
+    Route::post('', 'App\Http\Controllers\Api\OrderController@store'); 
 });

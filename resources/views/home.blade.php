@@ -131,7 +131,9 @@
                     <li class="list-type-img__child"><img src="/img/drinks-2.jpg" alt=""></li>
                     <li class="list-type-img__child"><img src="/img/drinks-3.webp" alt=""></li>
                 </ul>
-                <button id="btn-view-menu">View This Menu</button>
+                <button id="btn-view-menu">
+                    <a href="menu/products">View This Menu</a>
+                </button>
             </div>
         </div>
     </section>
