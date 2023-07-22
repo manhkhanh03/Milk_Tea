@@ -132,11 +132,11 @@ handleImport.isEmail = function (selector, message) {
     }
 }
 
-handleImport.isConfirmPassword = function (selector, message) { 
+handleImport.isConfirmPassword = function (selector, message, password) { 
     return {
         selector: selector,
         test: function (value) { 
-            const valuePassword = document.getElementById('password').value
+            const valuePassword = document.querySelector(password).value
             return valuePassword === value ? undefined : message
         }
     }

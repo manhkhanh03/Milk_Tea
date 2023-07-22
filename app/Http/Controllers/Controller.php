@@ -8,6 +8,7 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\ShippingController;
 
 class Controller extends BaseController
 {
@@ -16,6 +17,22 @@ class Controller extends BaseController
     public function show_web(Request $request, $address) {
         $url = $request->getSchemeAndHttpHost();
         return view($address)->with('url_web', $url);
+    }
+
+    public function show_web_order(Request $request, $address) {
+        $url = $request->getSchemeAndHttpHost();
+        $shipping = new ShippingController();
+        $all_shipping = json_decode(json_encode($shipping->show_status_shipping_by_customer_id($request)), true);
+        return view($address)->with('url_web', $url)->with('shipping', $all_shipping);
+    }
+
+    public function show_web_shipping_information(Request $request, $address) {
+        $url = $request->getSchemeAndHttpHost();
+        $shipping = new ShippingController();
+        $location = json_decode(json_encode($shipping->show_shipping_info_by_customer_id($request)), true);
+        
+        return view($address)->with('url_web', $url)->with('location', $location);
+        // return response()->json($location, 200);
     }
 
     public function show_pagination(Request $request) {
@@ -51,6 +68,6 @@ class Controller extends BaseController
     public function show_checkout(Request $request) {
         // ................
         $url = $request->getSchemeAndHttpHost();
-        return view('checkout')->with('url_web', $url);
+        return view('checkout')->with('url_web', $url)->with('web', $request->web);
     }
 }

@@ -160,31 +160,59 @@
             checkout: '.__input-checkout',
             btnOrder: '#btn-checkout',
             handle: function(data, options) {
-
                 if(Object.keys(user).length != 0) {
+                    let url = @json($web) == 'cart' ? '/api/cart/decode_token' : '/api/order/decode_token'
                     handleApiMethodGet({
-                        urlApi: `/api/order/decode_token`,
+                        urlApi: url,
                         handleDataGet: function(data, newOptions) {
-                            dataOrder.quantity = data.quantity;
-                            dataOrder.product_size_flavor_id = data.product_size_flavor_id;
-                            dataOrder.customer_id = data.user_id;
-
-
-                            function addTotalCart(data, options) {
+                            function addTotalCart(data, options, newData) {
                                 const totalElement = document.querySelector(options.total)
                                 const subTotalElement = document.querySelector(options.subTotal)
-                                const delivery = document.querySelector(options.delivery)
-                                const discount = document.querySelector(options.discount)
+                                const deliveryElement = document.querySelector(options.delivery)
+                                const discountElement = document.querySelector(options.discount)
 
-                                let sub = data.price * data.quantity
-                                dataOrder.total = (parseFloat(sub + data.delivery) - parseFloat(data.discount + data.web_discount))
+                                let sub = 0
+                                let total  = 0
+                                let delivery = 0
+                                let discount = 0
+                                if (!newData) {
+                                    sub = data.price * data.quantity
+                                    delivery = parseFloat(data.delivery)
+                                    discount = parseFloat(data.discount) + parseFloat(data.web_discount)
+                                    total = parseFloat(sub + delivery) - discount 
+
+                                    dataOrder.quantity.push(data.quantity);
+                                    dataOrder.product_size_flavor_id.push(data.product_size_flavor_id);
+                                    dataOrder.total.push(total);
+                                    dataOrder.customer_id = data.user_id;
+                                } else {                                 
+                                    newData.forEach(function(item) {
+                                        sub += item.price * item.quantity
+                                        delivery += parseFloat(item.delivery)
+                                        discount += parseFloat(item.discount + item.web_discount)
+
+                                        dataOrder.quantity.push(item.quantity);
+                                        dataOrder.product_size_flavor_id.push(item.product_size_flavor_id);
+                                        dataOrder.total.push((parseFloat(item.price) * parseFloat(item.quantity) + item.delivery)
+                                        - parseFloat(item.discount + item.web_discount));
+                                        dataOrder.cart_id.push(item.cart_id);
+                                        dataOrder.customer_id = item.user_id;
+                                    })
+                                    total += parseFloat(sub + delivery) - discount
+                                }
+
                                 subTotalElement.innerText = sub.toFixed(2)
-                                delivery.innerText = data.delivery.toFixed(2)
-                                discount.innerText = (parseFloat(data.discount) + parseFloat(data.web_discount)).toFixed(2)
-                                totalElement.innerText = dataOrder.total.toFixed(2)
+                                deliveryElement.innerText = delivery.toFixed(2)
+                                discountElement.innerText = discount.toFixed(2)
+                                totalElement.innerText = total.toFixed(2)
                             }
 
-                            addTotalCart(data, options)
+                            if (!Array.isArray(data)) {
+                                addTotalCart(data, options)
+                            } else {  
+                                let newData = {}
+                                addTotalCart(newData, options, data)
+                            }
                         },
                     })
                 }
@@ -213,15 +241,38 @@
             })
             
             // getmethodpost
-            handleApiMethodPost({
-                data: dataOrder,
-                urlApi: '/api/order',
-                urlWeb: '/home',
-                handle: function(data, options) {
-                    alert('Order successful')
-                    window.location.href = @json($url_web) + '.home';
+            dataOrder.total.forEach(function(item, index) {
+                const newDataOrder = {
+                    customer_id: dataOrder.customer_id,
+                    payment_method: dataOrder.payment_method,
+                    shipping_address: dataOrder.shipping_address,
+                    product_size_flavor_id: dataOrder.product_size_flavor_id[index],
+                    quantity: dataOrder.quantity[index],
+                    total: item,
                 }
+
+                if(newDataOrder.payment_method === 'Direct Bank Transfer') {
+                    newDataOrder.payment_status = 'Paid'
+                }
+
+                handleApiMethodPost({
+                    data: newDataOrder,
+                    urlApi: '/api/order',
+                    urlWeb: '/home',
+                    handle: function(data, options) {}
+                })
             })
+            if(dataOrder.cart_id.length > 0) {
+                dataOrder.cart_id.forEach(function(cart) {
+                    let url = `api/cart/${cart}`
+                    handleApiMethodDelete({
+                        urlApi: url,
+                        handle: function(data, options) {},
+                    })
+                })  
+            }
+            alert('Order successful')
+            window.location.href = @json($url_web) + '/home';
         }
     })
     

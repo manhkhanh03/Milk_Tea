@@ -20,7 +20,7 @@
         </div>
         <div class="slider__inner">
             <div class="slider__content">
-                <h1 style="font-family: var(--font-family-title); color: var(--color-title);">Welcome To The Cart
+                <h1 style="font-family: var(--font-family-title); color: var(--color-title);">Cart
                 </h1><a href="#order" class="go-to-next">Order Now</a>
             </div>
         </div>
@@ -39,6 +39,7 @@
                     <li class="nav-item">Price</li>
                     <li class="nav-item">Quantity</li>
                     <li class="nav-item">Total</li>
+                    <li class="nav-item"></li>
                 </ul>
             </div>
     
@@ -80,8 +81,7 @@
                             <span>$</span>
                         </p>
                     </div>
-                    <button class="btn-checkout">
-                        <a href="{{$url_web}}/menu/products/checkout">Proceed to Checkout</a>
+                    <button class="btn-checkout" id="btn-checkout"> Proceed to Checkout
                     </button>
                 </div>
             </div>
@@ -104,40 +104,45 @@
             urlApi: `/api/cart/customer?customer_id=${user.userId}`,
             selector: '.list-products',
             handleDataGet: function (data, options) {
-            
+
+            dataCart = data;
+
             const htmls = data.map(function (product, index) {
                 return `
                 <li class="__item-product">
                     <div class="box-left-product">
                         <input type="checkbox" class="__item-product__child" name="checkbox-product" id="">
-                        <p class="__item-product__child __item-product__img" style="background-image: url(${product.url});">
-                        </p>
+                        <a href="${URLWeb}/menu/products/product/${(product.product_name).replaceAll(/\s+/g, '-')}?name=${product.product_name}&product=${product.id}">
+                            <p class="__item-product__child __item-product__img" style="background-image: url(${product.url});"></p>
+                         </a>
                     </div>
                     <div class="box-right-product">
                         <div class="__item-product__info __item-product__child">
-                            <p class="name">${product.product_name}</p>
+                            <a href="${URLWeb}/menu/products/product/${(product.product_name).replaceAll(/\s+/g, '-')}?name=${product.product_name}&product=${product.id}"> <p class="name">${product.product_name}</p></a>
                             <p class="flavor">Flavor: ${product.flavor_name}</p>
                             <p class="size">Size: ${product.size_name}</p>
                         </div>
                         <div class="__item-product__child __item-product__price">${product.price}$</div>
-                        <input type="number" name="" value="${product.quantity}" class="__item-product__child __item-product__quantity"
+                        <input type="number" name="" data-product="${product.cart_id}" value="${product.quantity}" class="__item-product__child __item-product__quantity"
                             id="">
                         <p class="__item-product__child __item-product__total">${product.total}$</p>
+                        <p class="__item-product__child __item-product__delete">
+                            <i style="cursor: pointer;" data-product="${product.cart_id}" class="fa-solid fa-xmark"></i>    
+                        </p>
+                        
                     </div>
                 </li>
                 `
             })
-            
             const parentElement = document.querySelector(options.selector)
             // if(Array.isArray(htmls) && !htmls.length === 0)
-                parentElement.innerHTML = htmls.join('')
+            parentElement.innerHTML = htmls.join('')
             // else 
             //     parentElement.innerHTML = 'Log in to use the service'
             
             handleCheckout({
                 input: 'input[name="checkbox-product"]',
                 parentElement: '.__item-product',
-                
                 parentTotalCart: '.container__cart-total',
                 total: '.total_price',
                 discount: '.discount_price',
@@ -147,6 +152,39 @@
                 }, data)
             }
         });
+
+        await handleDeleteProductCart({
+            btnDelete: '.__item-product__delete .fa-xmark',
+            attribute: 'data-product',
+            urlApi: '/api/cart/',
+            handleData: function(options) {
+                handleApiMethodDelete(options)
+            },
+            handle: function (options) {
+                main();
+            }
+        })
+
+        await handleCheckoutCart({
+            btn: '#btn-checkout',
+            checkbox: 'input[name="checkbox-product"]',
+            quantity: '.__item-product__quantity',
+            attribute: 'data-product',
+            handle: function(data, options) {
+                data.user_id = user.userId;
+                data.delivery = 0.5
+
+                if(Object.keys(user).length != 0) {
+                    handleApiMethodPost({
+                        urlApi: '/api/cart/token',
+                        data: data,
+                        handle: function (data, options) {
+                            window.location.href = @json($url_web) + '/menu/products/checkout?web=cart'
+                        }
+                    })
+                }
+            }   
+        })
     }
 
     main();

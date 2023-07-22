@@ -258,11 +258,9 @@
                     //     delivery: 0.50,
                     // },
                     handle: function (data, options) {
-                        window.location.href = @json($url_web) + '/menu/products/checkout'
+                        window.location.href = @json($url_web) + '/menu/products/checkout?web=product'
                     }
                 })
-            }else {
-                console.log(user)
             }
         }
     })

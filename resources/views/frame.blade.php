@@ -10,6 +10,9 @@
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Josefin+Sans:400,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Great+Vibes" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     @stack('style')
 </head>
 
@@ -108,6 +111,30 @@
         <script src="/js/slide.js"></script>
         <script src="/js/main.js"></script>
         @stack('js')
+        <script>
+
+            async function main() {
+                await handleInfomartionUser('.login__user');
+                await handleLogout({
+                    urlApi: '/api/user/logout',
+                    btnLogout: '#logout',
+                    handleDataGet: function(data, options) {
+                        window.location.href = URLWeb + '/login'
+                    }
+                })
+
+                await handleProfile({
+                    urlApi: '/user/account/profile',
+                    btn: '#information',
+                    handle: function(options) {
+                        window.location.href = URLWeb + options.urlApi
+                    }
+                })
+            }
+
+            main();
+
+        </script>
         <script>
             $('a[href*="#"]')
                     // Remove links that don't actually link to anything

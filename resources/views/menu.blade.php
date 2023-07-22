@@ -23,7 +23,7 @@
             </div>
             <div class="slider__inner">
                 <div class="slider__content">
-                    <h1 style="font-family: var(--font-family-title); color: var(--color-title);">Welcome To The Menu
+                    <h1 style="font-family: var(--font-family-title); color: var(--color-title);">Menu
                     </h1><a href="#order" class="go-to-next">Order Now</a>
                 </div>
             </div>

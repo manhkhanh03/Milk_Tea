@@ -132,7 +132,7 @@ class OrderController extends Controller
             'nbf' => time(),
             'sub' => $request->product_id,
             'jti' => 'your_jti',
-            'products' => serialize($result),
+            'product' => serialize($result),
         );
 
         // Storage::put('products.txt', serialize($products));
@@ -145,8 +145,8 @@ class OrderController extends Controller
         $token = $request->Cookie('info_order');
         try {
             $payload  = JWTAuth::setToken($token)->getPayload();
-            $products = unserialize($payload->get('products'));
-            return response()->json($products, 200);
+            $product = unserialize($payload->get('product'));
+            return response()->json($product, 200);
         }catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 400);
         }

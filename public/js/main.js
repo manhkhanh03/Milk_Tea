@@ -17,6 +17,14 @@ function handleUser(options) {
         parentElement.innerHTML = `
         <img style="margin-right: 6px" src="${options.user.img_user}" alt="${options.user.userName}" class="icon">
         <span>${options.user.userName}</span>
+        <ul class="menu__navbar__logout-and-info-user">
+            <li class="__information-user" id="information">
+                Information user
+            </li>
+            <li class="__information-user logout" id="logout">
+                Log out
+            </li>
+        </ul>
     `
     }
 }
@@ -91,7 +99,6 @@ function handleNumbers(number, nameAttribute) {
 
 function isActive(options, element, currentIndex) {
     if (typeof (options.handleMovePage) == 'function') {
-        console.log(currentIndex)
         options.handleMovePage({
             nextPage: currentIndex,
             perPage: options.quantity,
@@ -130,7 +137,6 @@ const eventMove = function (options, listType) {
     next.onclick = () => {
         currentIndex++
         if (currentIndex < listType.length && currentIndex >= 0) {
-            console.log(currentIndex)
             if (!(currentIndex === listType.length)) {
                 moveElement = document.querySelector(options.cardTypeParent).querySelector(`:nth-child(${currentIndex + 1})`)
                 isActive(options, moveElement, currentIndex)
@@ -149,7 +155,6 @@ const eventMove = function (options, listType) {
 
 function handlePagination(options) {
     const listType = document.querySelectorAll(options.card_type);
-    console.log(listType)
     listType.forEach((element, index) => {
         element.onclick = () => {
             if (options.event) {
@@ -184,3 +189,40 @@ handleApiMethodPost.isSelectorFail = function (selector, message) {
     }
 }
 
+function handleApiMethodDelete(options) { 
+    optionsApi.method = 'DELETE'
+    fetch(URLWeb + options.urlApi, optionsApi)
+        .then(response => response.json())
+        .then(data => {
+            options.handle(data, options)
+        })
+}
+
+function handleApiMethodPut(options) {
+    optionsApi.method = 'PUT';
+    optionsApi.body = JSON.stringify(options.data)
+    console.log(URLWeb + options.urlApi)
+    fetch(URLWeb + options.urlApi, optionsApi)
+        .then(response => response.json())
+        .then(data => {
+            options.handle(data, options)
+        })
+}
+
+function handleLogout(options) { 
+    const btn = document.querySelector(options.btnLogout)
+    if (btn) {
+        btn.addEventListener('click', function (e) {
+            handleApiMethodGet(options)
+        })
+    }
+}
+
+function handleProfile(options) { 
+    const btn = document.querySelector(options.btn)
+    if (btn) { 
+        btn.addEventListener('click', function (e) {
+            options.handle(options)
+        })
+    }
+}

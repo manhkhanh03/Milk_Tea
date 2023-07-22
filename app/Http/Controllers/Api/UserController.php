@@ -66,8 +66,8 @@ class UserController extends Controller
 
                 $token = JWT::encode($payload, $secretKey, 'HS256');
                 $user->update(['remember_token' => hash('sha256', $token)]);
-                return response()->json($user, 200, ['OK'])->header('Authorization', 'Bearer ' . $token)->withCookie(Cookie::make('token', $token));
-            }
+                return response()->json($user, 200, ['OK'])->header('Authorization', 'Bearer ' . $token)->withCookie(Cookie::make('token', $token, 380));
+            } 
             else 
                 return response()->json(['status' => 'password'], 200, ['OK']);
         }else {
@@ -89,10 +89,7 @@ class UserController extends Controller
 
     public function handle_logout()  {
         $response = new Response(view('login'));
-        $response->withCookie(Cookie::make('token', null, 0));
-        // $response->withCookie(Cookie::make('role', null, 0));
-
-        return $response;
+        return response()->json($response, 200, ['OK'])->withCookie(Cookie::make('token', null, 0));
     }
 
 
@@ -101,7 +98,8 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $user = User::find($id);
+        return response()->json($user, 200, ['OK']);
     }
 
     /**
@@ -109,7 +107,27 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        try {
+            $user = User::find($id);
+            $user->update($request->all());
+            return response()->json($user, 200, ['OK']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
+    }
+
+    public function update_password(Request $request, string $id)
+    {   
+        $user = User::find($id);
+
+        if (!Hash::check($request->current_password, $user->password)) {
+            return response()->json(['error'=> 'Current password is incorrect.'], 400);
+        }
+
+        $user->password = Hash::make($request->new_password);
+        $user->save();
+
+        return response()->json($user, 200, ['OK']);
     }
 
     /**

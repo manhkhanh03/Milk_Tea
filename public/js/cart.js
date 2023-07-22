@@ -1,3 +1,5 @@
+let dataCart = []
+
 function handleCheckout(options, data) {
     const checkboxElement = document.querySelectorAll(options.input)
 
@@ -8,7 +10,6 @@ function handleCheckout(options, data) {
         const subtotal = document.querySelector(options.subtotal)
         const delivery = document.querySelector(options.delivery)
         const discount = document.querySelector(options.discount)
-        console.log(data[index])
         let sub = data[index].price
         let shipping = 0.50
         let discount_code = 0
@@ -30,7 +31,6 @@ function handleCheckout(options, data) {
             } else {
                 discount_code = parseFloat(value.discount_amount)
             }
-            console.log(discount_code)
             return discount_code;
         }
         if (isChecked) {
@@ -52,6 +52,48 @@ function handleCheckout(options, data) {
             if (this.checked)
                 totalCart(options, true, this, index)
             else totalCart(options, false, this, index)
+        }
+    })
+}
+
+function handleDeleteProductCart(options) {
+    const btnDelete = document.querySelectorAll(options.btnDelete);
+    btnDelete.forEach(function (item) {
+        item.addEventListener('click', function (event) {
+            options.urlApi = options.urlApi.split("/").slice(0, 3).join("/") + '/' + event.target.getAttribute(options.attribute)
+            options.handleData(options)
+        })
+    })
+}
+
+function handleCheckoutCart(options) { 
+    const quantityElements = document.querySelectorAll(options.quantity)
+    const checkboxElements = document.querySelectorAll(options.checkbox)
+    const btnCheckout = document.querySelector(options.btn);
+    const data = {
+        product_size_flavor_id: [],
+        product_id: [],
+        price: [],
+        quantity: [],
+        total: [],
+        cart_id: [],
+    }
+    btnCheckout.addEventListener('click', function (event) { 
+        checkboxElements.forEach(function (item, key) { 
+            if (item.checked) {
+                let quantity = quantityElements[key].value
+                let price = dataCart[key].price
+
+                data.product_size_flavor_id.push(dataCart[key].product_size_flavor_id)
+                data.price.push(parseFloat(price))
+                data.quantity.push(parseFloat(quantity))
+                data.total.push(parseFloat(quantity * price))
+                data.product_id.push(dataCart[key].id)
+                data.cart_id.push(quantityElements[key].getAttribute(options.attribute))
+            }
+        })
+        if (data.product_size_flavor_id.length !== 0) {
+            options.handle(data, options)
         }
     })
 }

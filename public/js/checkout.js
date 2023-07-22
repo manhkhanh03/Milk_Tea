@@ -1,6 +1,11 @@
 // local variables
 let total;
-const dataOrder = {}
+const dataOrder = {
+    product_size_flavor_id: [],
+    quantity: [],
+    total: [],
+    cart_id: [],
+}
 
 function handleCheckoutMethod(options) {
     const inputElements = document.querySelectorAll(options.checkbox);

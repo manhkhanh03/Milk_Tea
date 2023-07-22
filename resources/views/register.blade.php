@@ -4,6 +4,7 @@
 
 @push('styles')
 <link rel="stylesheet" href="/css/login.css">
+<link rel="stylesheet" href="/css/register.css">
 @endpush
 
 @push('body')
@@ -66,13 +67,13 @@
         formInput: '.form-input',
         formMessage: '.form-message',
         rules: [
-        handleImport.isFocus('#username', 'Vui lòng nhập Username'),
-        handleImport.isFocus('#password', 'Vui lòng nhập Password'),
-        handleImport.isFocus('#email', 'Vui lòng nhập Email'),
-        handleImport.isFocus('#confirm-password', 'Vui lòng nhập lại Password'),
-        handleImport.isPassword('#password', 'Password ít nhất 8 ký tự'),
-        handleImport.isEmail('#email', 'Trường này phải là email'),
-        handleImport.isConfirmPassword('#confirm-password', 'Xác thực lại password'),
+        handleImport.isFocus('#username', 'Please enter your Username'),
+        handleImport.isFocus('#password', 'Please enter your Password'),
+        handleImport.isFocus('#email', 'Please enter your Email'),
+        handleImport.isFocus('#confirm-password', 'Please re-enter your password'),
+        handleImport.isPassword('#password', 'Password must be at least 8 characters'),
+        handleImport.isEmail('#email', 'Please enter a valid email address'),
+        handleImport.isConfirmPassword('#confirm-password', 'Re-enter your password', '#password'),
         ],
         isSuccess: function (data) {
             const newData = {
