@@ -31,7 +31,7 @@ Route::prefix('user')->group(function () {
     Route::get('', 'App\Http\Controllers\Api\UserController@index');
     Route::get('/token', 'App\Http\Controllers\Api\UserController@decodeToken');
     Route::get('/logout', 'App\Http\Controllers\Api\UserController@handle_logout');
-    Route::get('/profile/{id}', 'App\Http\Controllers\Api\UserController@show');
+    Route::get('/profile/{id}', 'App\Http\Controllers\Api\UserController@show') ;
     Route::post('', 'App\Http\Controllers\Api\UserController@store');
     Route::post('/check_pass', 'App\Http\Controllers\Api\UserController@check_login');
     Route::put('/{id}', 'App\Http\Controllers\Api\UserController@update');
@@ -53,3 +53,9 @@ Route::prefix('shipping')->group(function () {
     Route::put('/{id}', 'App\Http\Controllers\Api\ShippingController@update_delivery_person');
     Route::put('/status/{id}', 'App\Http\Controllers\Api\ShippingController@update_delivery_person');
 });
+
+Route::prefix('notification')->group(function () {
+    Route::get('/update/order/{id}', 'App\Http\Controllers\Api\NotificationController@show_update_order');
+});
+
+Route::get('test', 'App\Http\Controllers\Api\UserController@checkuser');

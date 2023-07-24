@@ -48,7 +48,7 @@
                         </ul>
                     </li>
                     <li class="nav__profile-item purchase-order">
-                        <a href="/user/purchase_order?customer=4&status=Awaiting delivery">
+                        <a href="{{$url_web}}/user/purchase_order?customer=4&status=Awaiting delivery">
                             <div class="__profile-item__name">
                                 <i class="fa-solid fa-list-check"></i>
                                 <p class="name">Purchase order</p>
@@ -56,10 +56,12 @@
                         </a>
                     </li>
                     <li class="nav__profile-item">
-                        <div class="__profile-item__name">
-                            <i class="fa-regular fa-bell"></i>
-                            <p class="name">Notification</p>
-                        </div>
+                        <a href="{{$url_web}}/user/notification">
+                            <div class="__profile-item__name">
+                                <i class="fa-regular fa-bell"></i>
+                                <p class="name">Notification</p>
+                            </div>
+                        </a>
                     </li>
                 </ul>
             </div>

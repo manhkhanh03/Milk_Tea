@@ -19,7 +19,9 @@ Route::get('', function (Request $request) {
     $url = $request->getSchemeAndHttpHost();
     return view('home')->with('url_web', $url);
 });
-Route::get('/{address}', 'App\Http\Controllers\Controller@show_web');
+Route::get('login', 'App\Http\Controllers\Controller@show_login')->name('login');
+Route::get('/{address}', 'App\Http\Controllers\Controller@show_web')->middleware('web');
+
 
 Route::prefix('menu')->group(function () {
     Route::get('/products', 'App\Http\Controllers\Controller@show_pagination');
@@ -28,7 +30,11 @@ Route::prefix('menu')->group(function () {
 });
 
 Route::prefix('user')->group(function () {
-    Route::get('/account/{address}', 'App\Http\Controllers\Controller@show_web');
-    Route::get('/{address}', 'App\Http\Controllers\Controller@show_web_order');
-    Route::get('/purchase/order/{address}', 'App\Http\Controllers\Controller@show_web_shipping_information');
+    Route::get('/account/{address}', 'App\Http\Controllers\Controller@show_web')->middleware('auth');
+    Route::get('/{address}', 'App\Http\Controllers\Controller@show_web_order')->middleware('auth');
+    Route::get('/purchase/order/{address}', 'App\Http\Controllers\Controller@show_web_shipping_information')->middleware('auth');
+});
+
+Route::prefix('notification')->group(function () {
+    Route::get('/{address}', 'App\Http\Controllers\Controller@show_update');
 });

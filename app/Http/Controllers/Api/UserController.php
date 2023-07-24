@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
+use Auth;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Firebase\JWT\JWT;
 use Illuminate\Http\Response;
@@ -44,34 +44,14 @@ class UserController extends Controller
     }
 
     public function check_login(Request $request) {
-        $user = User::where('login_name', $request->login_name)->first();
-        if($user) {
-            if(Hash::check($request->password, $user->password)) {
-                $secretKey = config('jwt.secret');
-                $payload = array(
-                    'iss' => 'your_issuer',
-                    'iat' => time(),
-                    'exp' => time() + 3600,
-                    'nbf' => time(),
-                    'sub' => $user->id,
-                    'jti' => 'your_jti',
-                    'id' => $user->id,
-                    'user_name' => $user->user_name,
-                    'email' => $user->email,
-                    'address' => $user->address,
-                    'phone' => $user->phone,
-                    'img_user' => $user->img_user,
-                    'is_seller_restricted' => $user->is_seller_restricted,
-                );
-
-                $token = JWT::encode($payload, $secretKey, 'HS256');
-                $user->update(['remember_token' => hash('sha256', $token)]);
-                return response()->json($user, 200, ['OK'])->header('Authorization', 'Bearer ' . $token)->withCookie(Cookie::make('token', $token, 380));
-            } 
-            else 
-                return response()->json(['status' => 'password'], 200, ['OK']);
-        }else {
-            return response()->json(['status' => 'username'], 200, ['OK']);
+        $credentials = $request->only('login_name', 'password');
+        if (Auth::attempt($credentials)) {
+            $user = Auth::user();
+            $token = JWTAuth::fromUser($user);
+            return response()->json($user, 200, ['OK'])->header('Authorization', 'Bearer ' . $token)
+                ->withCookie(Cookie::make('token', $token, 380));
+        } else {
+            return response()->json(['status' => 'login_failed'], 401, ['Unauthorized']);
         }
     }
 
@@ -81,15 +61,27 @@ class UserController extends Controller
         try {
             $payload = JWTAuth::setToken($token)->getPayload();
             $user = Auth::guard('api')->authenticate();
+            // Auth::setUser($user);
             return response()->json(['payload' => $payload, 'user' => $user], 200);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 400);
         }
+
+        // if(Auth::guard('api')->check()) {
+        //     $payload = JWTAuth::setToken($token)->getPayload();
+        //     return response()->json(['payload' => $payload, 'user' => Auth::guard('api')->user()], 200);
+        // }else {
+        //     return response()->json(['error' => 'error'], 400);
+        // }
     }
 
     public function handle_logout()  {
         $response = new Response(view('login'));
         return response()->json($response, 200, ['OK'])->withCookie(Cookie::make('token', null, 0));
+    }
+
+    public function handle_roles(Request $request) {
+
     }
 
 
@@ -136,5 +128,13 @@ class UserController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function checkuser() {
+        if (Auth::guard('api')->check()) {
+            return response()->json(Auth::guard('api')->user(), 200);;
+        }else {
+            return response()->json(['status' => 'false'], 200);
+        }
     }
 }

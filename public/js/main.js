@@ -15,17 +15,9 @@ function handleUser(options) {
     const parentElement = document.querySelector(options.selector)
     if (parentElement) {
         parentElement.innerHTML = `
-        <img style="margin-right: 6px" src="${options.user.img_user}" alt="${options.user.userName}" class="icon">
-        <span>${options.user.userName}</span>
-        <ul class="menu__navbar__logout-and-info-user">
-            <li class="__information-user" id="information">
-                Information user
-            </li>
-            <li class="__information-user logout" id="logout">
-                Log out
-            </li>
-        </ul>
-    `
+            <img style="margin-right: 6px" src="${options.user.img_user}" alt="${options.user.userName}" class="icon">
+            <span>${options.user.userName}</span>
+        `
     }
 }
 

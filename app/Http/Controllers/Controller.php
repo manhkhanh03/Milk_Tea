@@ -9,6 +9,9 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ShippingController;
+use App\Http\Controllers\Api\NotificationController;
+use Illuminate\Support\Facades\Auth;
+// use Illuminate\Support\Facades\Cookie;
 
 class Controller extends BaseController
 {
@@ -17,6 +20,11 @@ class Controller extends BaseController
     public function show_web(Request $request, $address) {
         $url = $request->getSchemeAndHttpHost();
         return view($address)->with('url_web', $url);
+    }
+
+    public function show_login(Request $request) {
+        $url = $request->getSchemeAndHttpHost();
+        return view('login')->with('url_web', $url);
     }
 
     public function show_web_order(Request $request, $address) {
@@ -69,5 +77,13 @@ class Controller extends BaseController
         // ................
         $url = $request->getSchemeAndHttpHost();
         return view('checkout')->with('url_web', $url)->with('web', $request->web);
+    }
+
+    public function show_update(Request $request, $address) {
+        $url = $request->getSchemeAndHttpHost();
+        // $noti = new NotificationController();
+        // $notifications = json_decode(json_encode($noti->show_update_order($request)), true);
+        // return $notifications;
+        return view($address)->with('url_web', $url);
     }
 }

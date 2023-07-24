@@ -16,6 +16,11 @@
     @stack('style')
 </head>
 
+@php
+    use Illuminate\Support\Facades\Auth;
+    use Illuminate\Support\Facades\Gate;
+@endphp
+
 <body>
     @section('menu')
         <menu>
@@ -48,11 +53,38 @@
                         <img src="/img/bag.png" alt="" class="icon">
                     </a>
                 </li>
-                <li class="menu__navbar-item login__user">
-                    <a href="{{$url_web}}/login" class="menu__navbar-item__icon">
-                        <img style="margin-right: 6px" src="/img/user.png" alt="" class="icon">
-                        <span></span>
-                    </a>
+                <li class="menu__navbar-item parent-login-user">
+                    <div class="login__user">
+                        <a href="{{$url_web}}/login" class="menu__navbar-item__icon">
+                            <img style="margin-right: 6px" src="/img/user.png" alt="" class="icon">
+                            <span></span>
+                        </a>
+                    </div>
+                    {{-- @if (Auth::guard('api')->check()) --}}
+                        <ul class="menu__navbar__logout-and-info-user">
+                            <li class="__information-user" id="information">
+                                Information user
+                            </li>
+                            @can('is-vendor', Auth::guard('api')->user())
+                            <li class="__information-user" id="vendor">
+                                Sales Management
+                            </li>
+                            @endcan
+                            @can('is-delivery_staff', Auth::guard('api')->user())
+                            <li class="__information-user" id="delivery_staff">
+                                Delivery Management
+                            </li>
+                            @endcan
+                            @can('is-admin', Auth::guard('api')->user())
+                            <li class="__information-user" id="admin">
+                                Administrator
+                            </li>
+                            @endcan
+                            <li class="__information-user logout" id="logout">
+                                Log out
+                            </li>
+                        </ul>
+                    {{-- @endif --}}
                 </li>
             </ul>
         </menu>
@@ -115,6 +147,7 @@
 
             async function main() {
                 await handleInfomartionUser('.login__user');
+                
                 await handleLogout({
                     urlApi: '/api/user/logout',
                     btnLogout: '#logout',
@@ -130,6 +163,7 @@
                         window.location.href = URLWeb + options.urlApi
                     }
                 })
+
             }
 
             main();
